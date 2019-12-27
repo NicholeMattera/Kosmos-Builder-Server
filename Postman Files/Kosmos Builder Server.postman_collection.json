@@ -6,120 +6,145 @@
 	},
 	"item": [
 		{
-			"name": "GitHub Release",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:9002/github/AtlasNX/Kosmos/release?pattern=.*Kosmos-.*\\.zip",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9002",
-					"path": [
-						"github",
-						"AtlasNX",
-						"Kosmos",
-						"release"
-					],
-					"query": [
-						{
-							"key": "pattern",
-							"value": ".*Kosmos-.*\\.zip"
+			"name": "GitHub",
+			"item": [
+				{
+					"name": "Release",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/github/AtlasNX/Kosmos/release?pattern=.*Kosmos-.*\\.zip",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"github",
+								"AtlasNX",
+								"Kosmos",
+								"release"
+							],
+							"query": [
+								{
+									"key": "pattern",
+									"value": ".*Kosmos-.*\\.zip"
+								}
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "Version",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/github/AtlasNX/Kosmos/version?pattern=.*Kosmos-.*\\.zip",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"github",
+								"AtlasNX",
+								"Kosmos",
+								"version"
+							],
+							"query": [
+								{
+									"key": "pattern",
+									"value": ".*Kosmos-.*\\.zip"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "GitHub Version",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:9002/github/AtlasNX/Kosmos/version?pattern=.*Kosmos-.*\\.zip",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9002",
-					"path": [
-						"github",
-						"AtlasNX",
-						"Kosmos",
-						"version"
-					],
-					"query": [
-						{
-							"key": "pattern",
-							"value": ".*Kosmos-.*\\.zip"
+			"name": "GitLab",
+			"item": [
+				{
+					"name": "Release",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/gitlab/4TU/hb-appstore/release?pattern=\\((.*\\.nro.zip)\\)&match=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"gitlab",
+								"4TU",
+								"hb-appstore",
+								"release"
+							],
+							"query": [
+								{
+									"key": "pattern",
+									"value": "\\((.*\\.nro.zip)\\)"
+								},
+								{
+									"key": "match",
+									"value": "1"
+								}
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "Version",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/gitlab/4TU/hb-appstore/version?pattern=\\((.*\\.nro.zip)\\)&match=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"gitlab",
+								"4TU",
+								"hb-appstore",
+								"version"
+							],
+							"query": [
+								{
+									"key": "pattern",
+									"value": "\\((.*\\.nro.zip)\\)"
+								},
+								{
+									"key": "match",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "GitLab Release",
+			"name": "Clear Cache",
 			"request": {
-				"method": "GET",
+				"method": "DELETE",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
-					"raw": "http://localhost:9002/gitlab/4TU/hb-appstore/release?pattern=\\((.*\\.nro.zip)\\)&match=1",
-					"protocol": "http",
+					"raw": "{{host}}/cache",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "9002",
 					"path": [
-						"gitlab",
-						"4TU",
-						"hb-appstore",
-						"release"
-					],
-					"query": [
-						{
-							"key": "pattern",
-							"value": "\\((.*\\.nro.zip)\\)"
-						},
-						{
-							"key": "match",
-							"value": "1"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GitLab Version",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:9002/gitlab/4TU/hb-appstore/version?pattern=\\((.*\\.nro.zip)\\)&match=1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "9002",
-					"path": [
-						"gitlab",
-						"4TU",
-						"hb-appstore",
-						"version"
-					],
-					"query": [
-						{
-							"key": "pattern",
-							"value": "\\((.*\\.nro.zip)\\)"
-						},
-						{
-							"key": "match",
-							"value": "1"
-						}
+						"cache"
 					]
 				}
 			},
