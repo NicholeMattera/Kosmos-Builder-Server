@@ -15,6 +15,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+import { Headers } from 'request'
 import request from 'request-promise-native'
 import Config from '../config.json'
 import ICache from '../types/Cache'
@@ -87,11 +88,15 @@ class CacheWebService {
         if (release === null) {
             try {
                 const url = `https://gitlab.com/api/v4/projects/${encodeURIComponent(`${user}/${project}`)}/releases`
+                const headers: Headers = {
+                    'User-Agent': `Kosmos-Builder-Server/${process.env.npm_package_version}`,
+                }
+                if (Config.gitLab.authenticate) {
+                    headers.Authorization = `Bearer ${Config.gitLab.privateAccessToken}`
+                }
                 const response = JSON.parse(
                     await request({
-                        headers: {
-                            'User-Agent': `Kosmos-Builder-Server/${process.env.npm_package_version}`,
-                        },
+                        headers,
                         url,
                     }),
                 ) as IGitLabRelease[]

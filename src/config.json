@@ -4,5 +4,9 @@
         "authenticate": false,
         "username": "",
         "password": ""
+    },
+    "gitLab": {
+        "authenticate": false,
+        "privateAccessToken": ""
     }
 }
