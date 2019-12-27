@@ -36,6 +36,24 @@ export default class App {
     }
 
     private initMiddleware() {
+        // Get the body data.
+        this.app.use((req, res, next) => {
+            if (req.method === 'GET') {
+                next()
+                return
+            }
+
+            let data = ''
+            req.setEncoding('utf8')
+            req.on('data', (chunk) => {
+               data += chunk
+            })
+            req.on('end', () => {
+                req.body = data
+                next()
+            })
+        })
+
         // Remove express header and prevent caching
         this.app.use((req, res, next) => {
             res.removeHeader('X-Powered-By')

@@ -124,6 +124,10 @@ class CacheWebService {
         return Promise.resolve(release)
     }
 
+    public static clearCache() {
+        this.cache = []
+    }
+
     private static cache: ICache[] = []
 
     private static cleanCache() {

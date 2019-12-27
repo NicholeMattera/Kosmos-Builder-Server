@@ -1,5 +1,6 @@
 {
     "portNumber": 9003,
+    "secretKey": "",
     "gitHub": {
         "authenticate": false,
         "username": "",
