@@ -16,6 +16,7 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import request from 'request-promise-native'
+import Config from '../config.json'
 import ICache from '../types/Cache'
 import { IGitHubRelease } from '../types/GitHub'
 import { IGitLabRelease } from '../types/GitLab'
@@ -31,13 +32,16 @@ class CacheWebService {
         let release = this.checkForCache(Service.GitHub, user, project)
         if (release === null) {
             try {
-                let response = await request({
-                    headers: {
-                        'User-Agent': `Kosmos-Builder-Server/${process.env.npm_package_version}`,
-                    },
-                    url: `https://api.github.com/repos/${encodeURI(user)}/${encodeURI(project)}/releases/latest`,
-                })
-                response = JSON.parse(response) as IGitHubRelease
+                const login = (Config.gitHub.authenticate) ? `${Config.gitHub.username}:${Config.gitHub.password}@` : ''
+                const url = `https://${login}api.github.com/repos/${encodeURI(user)}/${encodeURI(project)}/releases/latest`
+                const response = JSON.parse(
+                    await request({
+                        headers: {
+                            'User-Agent': `Kosmos-Builder-Server/${process.env.npm_package_version}`,
+                        },
+                        url,
+                    }),
+                ) as IGitHubRelease
 
                 if (
                     response.assets &&
@@ -83,8 +87,14 @@ class CacheWebService {
         if (release === null) {
             try {
                 const url = `https://gitlab.com/api/v4/projects/${encodeURIComponent(`${user}/${project}`)}/releases`
-                let response = await request(url)
-                response = JSON.parse(response) as IGitLabRelease[]
+                const response = JSON.parse(
+                    await request({
+                        headers: {
+                            'User-Agent': `Kosmos-Builder-Server/${process.env.npm_package_version}`,
+                        },
+                        url,
+                    }),
+                ) as IGitLabRelease[]
 
                 if (response.length !== 0 && response[0].description) {
                     release = {
