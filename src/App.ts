@@ -15,7 +15,6 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import bodyParser from 'body-parser'
 import express from 'express'
 
 export default class App {
@@ -37,8 +36,6 @@ export default class App {
     }
 
     private initMiddleware() {
-        this.app.use(bodyParser.json())
-
         // Remove express header and prevent caching
         this.app.use((req, res, next) => {
             res.removeHeader('X-Powered-By')
