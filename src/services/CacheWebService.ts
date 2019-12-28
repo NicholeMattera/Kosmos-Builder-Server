@@ -29,12 +29,13 @@ class CacheWebService {
         user: string,
         project: string,
         pattern: RegExp,
+        includePrerelease: boolean,
     ): Promise<IRelease> {
-        let release = this.checkForCache(Service.GitHub, user, project)
+        let release = this.checkForCache(Service.GitHub, user, project, includePrerelease)
         if (release === null) {
             try {
                 const login = (Config.gitHub.authenticate) ? `${Config.gitHub.username}:${Config.gitHub.password}@` : ''
-                const url = `https://${login}api.github.com/repos/${encodeURI(user)}/${encodeURI(project)}/releases/latest`
+                const url = `https://${login}api.github.com/repos/${encodeURI(user)}/${encodeURI(project)}/releases`
                 const response = JSON.parse(
                     await request({
                         headers: {
@@ -42,19 +43,18 @@ class CacheWebService {
                         },
                         url,
                     }),
-                ) as IGitHubRelease
+                ) as IGitHubRelease[]
+                const latestRelease = response.find((r) => {
+                    return (includePrerelease && r.prerelease) || !r.prerelease
+                })
 
-                if (
-                    response.assets &&
-                    response.assets.length !== 0 &&
-                    response.tag_name
-                ) {
+                if (latestRelease !== undefined) {
                     release = {
-                        assets: response.assets,
-                        version: response.tag_name,
+                        assets: latestRelease.assets,
+                        version: latestRelease.tag_name,
                     }
 
-                    this.cacheRelease(Service.GitHub, user, project, release)
+                    this.cacheRelease(Service.GitHub, user, project, release, includePrerelease)
                 }
             } catch (e) {
                 console.error(`Download Error: ${e}`)
@@ -84,7 +84,7 @@ class CacheWebService {
         pattern: RegExp,
         match: number,
     ): Promise<IRelease> {
-        let release = this.checkForCache(Service.GitLab, user, project)
+        let release = this.checkForCache(Service.GitLab, user, project, false)
         if (release === null) {
             try {
                 const url = `https://gitlab.com/api/v4/projects/${encodeURIComponent(`${user}/${project}`)}/releases`
@@ -107,7 +107,7 @@ class CacheWebService {
                         version: response[0].tag_name,
                     }
 
-                    this.cacheRelease(Service.GitLab, user, project, release)
+                    this.cacheRelease(Service.GitLab, user, project, release, false)
                 }
             } catch (e) {
                 console.error(`Download Error: ${e}`)
@@ -136,23 +136,38 @@ class CacheWebService {
         this.cache = this.cache.filter((obj) => obj.expiration > now)
     }
 
-    private static checkForCache(service: Service, user: string, project: string): IRelease | null {
+    private static checkForCache(
+        service: Service,
+        user: string,
+        project: string,
+        includedPrerelease: boolean,
+    ): IRelease | null {
         this.cleanCache()
 
         // Try to get the cached release.
         const cachedObj = this.cache.find((obj) =>
-            obj.service === service && obj.user === user && obj.project === project,
+            obj.service === service &&
+            obj.user === user &&
+            obj.project === project &&
+            obj.includedPrerelease === includedPrerelease,
         )
         return (cachedObj === undefined) ? null : cachedObj.release
     }
 
-    private static cacheRelease(service: Service, user: string, project: string, release: IRelease) {
+    private static cacheRelease(
+        service: Service,
+        user: string,
+        project: string,
+        release: IRelease,
+        includedPrerelease: boolean,
+    ) {
         this.cleanCache()
 
         const expiration = new Date()
         expiration.setHours( expiration.getHours() + 1)
         this.cache.push({
             expiration,
+            includedPrerelease,
             project,
             release,
             service,

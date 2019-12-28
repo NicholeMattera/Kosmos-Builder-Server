@@ -44,6 +44,7 @@ class GitHubController extends BaseController {
                 req.params.user,
                 req.params.project,
                 req.query.pattern,
+                req.query.prerelease === 'true',
             )
             res.status(200)
             res.send(release.version)
@@ -64,6 +65,7 @@ class GitHubController extends BaseController {
                 req.params.user,
                 req.params.project,
                 req.query.pattern,
+                req.query.prerelease === 'true',
             )
             res.status(200)
             res.send(release.downloadUrl)

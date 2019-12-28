@@ -24,6 +24,7 @@ interface ICache {
     release: IRelease
     service: Service
     user: string
+    includedPrerelease: boolean
 }
 
 export default ICache
