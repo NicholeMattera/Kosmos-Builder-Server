@@ -4,7 +4,8 @@
     "gitHub": {
         "authenticate": false,
         "username": "",
-        "password": ""
+        "password": "",
+        "secret": ""
     },
     "gitLab": {
         "authenticate": false,

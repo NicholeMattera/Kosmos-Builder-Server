@@ -128,6 +128,18 @@ class CacheWebService {
         this.cache = []
     }
 
+    public static clearCacheForSpecificProject(
+        service: Service,
+        user: string,
+        project: string,
+    ) {
+        this.cache = this.cache.filter((obj) =>
+            obj.service !== service &&
+            obj.user !== user &&
+            obj.project !== project,
+        )
+    }
+
     private static cache: ICache[] = []
 
     private static cleanCache() {

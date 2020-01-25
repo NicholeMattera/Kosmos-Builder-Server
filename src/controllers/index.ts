@@ -18,9 +18,11 @@
 import CacheController from './CacheController'
 import GitHubController from './GitHubController'
 import GitLabController from './GitLabController'
+import UpdateController from './UpdateController'
 
 export default [
     CacheController,
     GitHubController,
     GitLabController,
+    UpdateController,
 ]
